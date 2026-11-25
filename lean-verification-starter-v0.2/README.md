@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/35394143/README.md)
 # Lean 4 Verification Lab — Core-only starter
 
 This directory is a minimal Lean 4 project intended to provide a reproducible starting point for formal verification experiments. It currently uses Lean `leanprover/lean4:v4.36.0` and has no Mathlib dependency.
