@@ -1,4 +1,5 @@
-[README.md](https://github.com/user-attachments/files/35393805/README.md)# Lean 4 Verification Lab — Core-only starter
+[README.md](https://github.com/user-attachments/files/35394143/README.md)
+# Lean 4 Verification Lab — Core-only starter
 
 This directory is a minimal Lean 4 project intended to provide a reproducible starting point for formal verification experiments. It currently uses Lean `leanprover/lean4:v4.36.0` and has no Mathlib dependency.
 
@@ -54,3 +55,14 @@ Do not collapse these evidence levels into a single unqualified “verified” s
 
 Keep the current Core-only baseline stable. When Mathlib is needed, first select a revision compatible with the pinned Lean toolchain, add it explicitly to `lakefile.lean`, run `lake update`, and commit the resulting `lake-manifest.json`. Do not use a floating dependency revision for reproducibility-sensitive experiments.
 
+## Source integrity manifest
+
+`MANIFEST.sha256.json` covers the files inside this project directory, using paths relative to this directory. The manifest intentionally excludes itself to avoid a recursive hash. The repository-level GitHub Actions workflow is outside this manifest's scope; Git commits provide its version history.
+
+Verify the manifest locally:
+
+```sh
+python scripts/verify_manifest.py --root .
+```
+
+The verifier checks each listed file's existence, byte length, and SHA-256 digest, and rejects duplicate paths, absolute paths, and path traversal. It is an integrity check for the listed source snapshot, not a proof checker or a substitute for Git commit signatures.
