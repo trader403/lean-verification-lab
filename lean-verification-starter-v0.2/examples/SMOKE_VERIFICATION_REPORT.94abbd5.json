@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "project": {
+    "name": "lean-verification-starter-v0.2",
+    "commit": "94abbd54526d1089d60176abfb757dc36d2433ea",
+    "worktree_clean": null
+  },
+  "claim": {
+    "identifier": "SMOKE-IDENTITY-IMPLICATION-001",
+    "statement": "For every proposition P, P implies P.",
+    "formalization_review": "not_reviewed",
+    "reviewer": null
+  },
+  "status": "proof_audit_passed",
+  "environment": {
+    "lean_version": "leanprover/lean4:v4.36.0",
+    "mathlib_revision": null,
+    "lake_manifest_sha256": "7ed399aaa1509b68cdde1f050fa06c31a736fff5773458b9a2cce4bccd62dcb2",
+    "runner": "GitHub Actions ubuntu-latest"
+  },
+  "checks": [
+    {
+      "name": "source_preflight",
+      "result": "passed",
+      "exit_code": 0,
+      "command": "python scripts/audit_lean.py --root . --report preflight-report.json"
+    },
+    {
+      "name": "lake_check_build",
+      "result": "passed",
+      "exit_code": 0,
+      "command": "lake check-build"
+    },
+    {
+      "name": "lake_build_proofs",
+      "result": "passed",
+      "exit_code": 0,
+      "command": "lake build Proofs"
+    },
+    {
+      "name": "lean_action_build",
+      "result": "passed",
+      "exit_code": 0,
+      "command": "leanprover/lean-action@v1 (build: true)"
+    },
+    {
+      "name": "theorem_axiom_dependency_inspection",
+      "result": "passed",
+      "exit_code": null,
+      "command": "#print axioms FormalProject.identity_implication"
+    }
+  ],
+  "evidence": {
+    "logs": [
+      "https://github.com/trader403/lean-verification-lab/actions/runs/45548463076",
+      "Job 138983639775: Built Proofs.Main; #print axioms reports that FormalProject.identity_implication does not depend on any axioms."
+    ],
+    "source_files": [
+      "lean-verification-starter-v0.2/lean-toolchain",
+      "lean-verification-starter-v0.2/lakefile.lean",
+      "lean-verification-starter-v0.2/Proofs/Main.lean",
+      ".github/workflows/lean-verification.yml"
+    ],
+    "artifact_sha256": {
+      "lean-verification-preflight.zip": "ce8ec5324a139e7d34c0e48cc6a6be2bfde22042acc7196751bf33584aab847d",
+      "preflight-report.json": "9fc9b71996134170b2b5a6c27451005dfd9f1d91256115647c0e3bb436b079f3",
+      "lake-manifest.json": "7ed399aaa1509b68cdde1f050fa06c31a736fff5773458b9a2cce4bccd62dcb2"
+    }
+  },
+  "limitations": [
+    "This is an environment smoke test, not a substantive mathematical research result.",
+    "The proposition is elementary; no independent human formalization review has been recorded.",
+    "The source preflight is a conservative text scan and is not a proof checker.",
+    "The axiom-dependency result is Lean's #print axioms output; no independent proof checker has been run.",
+    "The repository commit does not yet track lake-manifest.json; this report records the manifest generated and archived by the CI run."
+  ]
+}
