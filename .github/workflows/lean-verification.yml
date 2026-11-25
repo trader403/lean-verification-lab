@@ -1,21 +1,66 @@
---- a/.github/workflows/lean-verification.yml
-+++ b/.github/workflows/lean-verification.yml
-@@ -45,16 +45,8 @@
-         env:
-           PROJECT_DIR: lean-verification-starter-v0.2
- 
--      - name: Generate Lake manifest and build project
--        working-directory: lean-verification-starter-v0.2
--        run: |
--          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none --no-modify-path
--          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
--          export PATH="$HOME/.elan/bin:$PATH"
--          lake update
--          lake check-build
--          lake build Proofs
--
-+      # lean-toolchain pins Lean 4.36.0; the committed lake-manifest.json
-+      # is consumed as-is. Do not run `lake update` in this verification job.
-       - name: Install Lean and build project
-         uses: leanprover/lean-action@v1
-         with:
+name: Lean verification
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Preflight and Lean build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run source preflight
+        run: |
+          python "${PROJECT_DIR}/scripts/audit_lean.py" --root "${PROJECT_DIR}" --report preflight-report.json
+        env:
+          PROJECT_DIR: lean-verification-starter-v0.2
+
+      - name: Test manifest verifier
+        run: |
+          python -m unittest discover -s "${PROJECT_DIR}/tests" -v
+        env:
+          PROJECT_DIR: lean-verification-starter-v0.2
+
+      - name: Verify source manifest
+        run: |
+          python "${PROJECT_DIR}/scripts/verify_manifest.py" --root "${PROJECT_DIR}"
+        env:
+          PROJECT_DIR: lean-verification-starter-v0.2
+
+      # lean-toolchain pins Lean 4.36.0; the committed lake-manifest.json
+      # is consumed as-is. Do not run `lake update` in this verification job.
+      - name: Install Lean and build project
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: lean-verification-starter-v0.2
+          auto-config: false
+          build: true
+          use-mathlib-cache: false
+
+      - name: Upload preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-verification-preflight
+          path: |
+            preflight-report.json
+            lean-verification-starter-v0.2/lake-manifest.json
+          if-no-files-found: warn
