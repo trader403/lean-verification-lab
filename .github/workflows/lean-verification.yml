@@ -41,6 +41,8 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           export PATH="$HOME/.elan/bin:$PATH"
           lake update
+          lake check-build
+          lake build Proofs
 
       - name: Install Lean and build project
         uses: leanprover/lean-action@v1
@@ -55,5 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lean-verification-preflight
-          path: preflight-report.json
+          path: |
+            preflight-report.json
+            lean-verification-starter-v0.2/lake-manifest.json
           if-no-files-found: warn
