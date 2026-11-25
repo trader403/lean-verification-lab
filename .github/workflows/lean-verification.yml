@@ -33,6 +33,14 @@ jobs:
           python "${PROJECT_DIR}/scripts/audit_lean.py" --root "${PROJECT_DIR}" --report preflight-report.json
         env:
           PROJECT_DIR: lean-verification-starter-v0.2
+          
+      - name: Generate Lake manifest
+        working-directory: lean-verification-starter-v0.2
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake update
 
       - name: Install Lean and build project
         uses: leanprover/lean-action@v1
