@@ -1,16 +1,9 @@
 {
+  "schema_version": "1.0.0",
   "algorithm": "sha256",
+  "scope": ".",
+  "self_exclusion": "MANIFEST.sha256.json",
   "files": [
-    {
-      "path": ".github/workflows/lean.yml",
-      "sha256": "aabc2ca5eafae88d7d6ab71dbbd1fc79eeb33fd863c1a6cd71af216fe3387ffd",
-      "size_bytes": 1194
-    },
-    {
-      "path": ".gitignore",
-      "sha256": "cc8cc1b40198dd46658b4e4a1659a8bb8b3c3c74d0ab5fd83a40196a626c5149",
-      "size_bytes": 22
-    },
     {
       "path": "Proofs/Main.lean",
       "sha256": "9d0a7d52df695f5f114c81d3736470923c0b6e48cca706c63f7724cba4df186b",
@@ -18,8 +11,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "58bcef0839d67efaedd604b335fc0f77ef519081e1a6da8f7007c908d603d590",
-      "size_bytes": 2912
+      "sha256": "930880f414a85e2feb421902f613faee17c7e985182e947d10fa7599df6a0aad",
+      "size_bytes": 4378
+    },
+    {
+      "path": "examples/SMOKE_VERIFICATION_REPORT.94abbd5.json",
+      "sha256": "5e75ebefbea788be0119d7ef0103656525263045e3d2050c9eebaadc28030507",
+      "size_bytes": 2845
     },
     {
       "path": "examples/VERIFICATION_REPORT.example.json",
@@ -27,9 +25,14 @@
       "size_bytes": 1035
     },
     {
+      "path": "lake-manifest.json",
+      "sha256": "7ed399aaa1509b68cdde1f050fa06c31a736fff5773458b9a2cce4bccd62dcb2",
+      "size_bytes": 150
+    },
+    {
       "path": "lakefile.lean",
-      "sha256": "d01d35df8d90fc0ba07cbd563b52d0f7bac4630b2003c446377c0823db91ea5b",
-      "size_bytes": 411
+      "sha256": "1f92f9f3818414387b89ca0011755241f3c080efe1a866d03ae96b48ad04d603",
+      "size_bytes": 429
     },
     {
       "path": "lean-toolchain",
@@ -45,6 +48,16 @@
       "path": "scripts/audit_lean.py",
       "sha256": "94b3f45e60b2ff7b90606adeb1d8636aac60a2b832f7da5d7570334e8580418a",
       "size_bytes": 2312
+    },
+    {
+      "path": "scripts/verify_manifest.py",
+      "sha256": "fd817a78858c2cb35ca1dc86a9eb648cd9e22308585c1459079d1d7fa2ba17ff",
+      "size_bytes": 4482
+    },
+    {
+      "path": "tests/test_verify_manifest.py",
+      "sha256": "2fd98554ef2a4bd3cb2c3383e2ba71607ecfed0f811df9d5a0d947eb42e6fe66",
+      "size_bytes": 2393
     }
   ]
 }
