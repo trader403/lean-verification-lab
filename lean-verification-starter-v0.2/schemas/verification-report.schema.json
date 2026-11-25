@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lean Verification Report",
+  "type": "object",
+  "required": ["schema_version", "project", "claim", "status", "environment", "checks", "evidence", "limitations"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "project": {
+      "type": "object",
+      "required": ["name", "commit"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "commit": {"type": "string", "minLength": 1},
+        "worktree_clean": {"type": ["boolean", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": ["identifier", "statement", "formalization_review"],
+      "properties": {
+        "identifier": {"type": "string"},
+        "statement": {"type": "string"},
+        "formalization_review": {"enum": ["not_reviewed", "reviewed", "rejected"]},
+        "reviewer": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "status": {"enum": ["not_run", "preflight_passed", "build_passed", "proof_audit_passed", "independently_reviewed", "failed", "blocked"]},
+    "environment": {
+      "type": "object",
+      "required": ["lean_version", "mathlib_revision"],
+      "properties": {
+        "lean_version": {"type": ["string", "null"]},
+        "mathlib_revision": {"type": ["string", "null"]},
+        "lake_manifest_sha256": {"type": ["string", "null"], "pattern": "^([a-fA-F0-9]{64})?$"},
+        "runner": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "result", "exit_code"],
+        "properties": {
+          "name": {"type": "string"},
+          "result": {"enum": ["passed", "failed", "not_run", "blocked"]},
+          "exit_code": {"type": ["integer", "null"]},
+          "command": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["logs", "source_files"],
+      "properties": {
+        "logs": {"type": "array", "items": {"type": "string"}},
+        "source_files": {"type": "array", "items": {"type": "string"}},
+        "artifact_sha256": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

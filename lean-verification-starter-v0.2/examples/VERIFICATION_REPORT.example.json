@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "project": {"name": "example-formal-project", "commit": "NOT_A_REAL_COMMIT", "worktree_clean": null},
+  "claim": {"identifier": "EXAMPLE-001", "statement": "Example identity implication theorem", "formalization_review": "not_reviewed", "reviewer": null},
+  "status": "not_run",
+  "environment": {"lean_version": null, "mathlib_revision": null, "lake_manifest_sha256": null, "runner": null},
+  "checks": [
+    {"name": "source_preflight", "result": "not_run", "exit_code": null, "command": "python3 scripts/audit_lean.py --root ."},
+    {"name": "lake_build", "result": "not_run", "exit_code": null, "command": "lake build"},
+    {"name": "axiom_audit", "result": "not_run", "exit_code": null, "command": "#print axioms FormalProject.identity_implication"}
+  ],
+  "evidence": {"logs": [], "source_files": ["Proofs/Main.lean"], "artifact_sha256": {}},
+  "limitations": ["This is a schema example, not an executed verification report.", "The example theorem has not been compiled in this environment."]
+}

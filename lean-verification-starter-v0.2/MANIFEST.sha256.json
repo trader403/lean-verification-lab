@@ -1,0 +1,50 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "path": ".github/workflows/lean.yml",
+      "sha256": "aabc2ca5eafae88d7d6ab71dbbd1fc79eeb33fd863c1a6cd71af216fe3387ffd",
+      "size_bytes": 1194
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "cc8cc1b40198dd46658b4e4a1659a8bb8b3c3c74d0ab5fd83a40196a626c5149",
+      "size_bytes": 22
+    },
+    {
+      "path": "Proofs/Main.lean",
+      "sha256": "9d0a7d52df695f5f114c81d3736470923c0b6e48cca706c63f7724cba4df186b",
+      "size_bytes": 263
+    },
+    {
+      "path": "README.md",
+      "sha256": "58bcef0839d67efaedd604b335fc0f77ef519081e1a6da8f7007c908d603d590",
+      "size_bytes": 2912
+    },
+    {
+      "path": "examples/VERIFICATION_REPORT.example.json",
+      "sha256": "e07652a06f51530485886a1301cc6fbded9926584f5c1b612013e9f98da73fb9",
+      "size_bytes": 1035
+    },
+    {
+      "path": "lakefile.lean",
+      "sha256": "d01d35df8d90fc0ba07cbd563b52d0f7bac4630b2003c446377c0823db91ea5b",
+      "size_bytes": 411
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "582a63f8f9c5128067b688778c1051cf1464c3ca9d57b9325025c051c29b774a",
+      "size_bytes": 25
+    },
+    {
+      "path": "schemas/verification-report.schema.json",
+      "sha256": "51b866b8af33676a947f4c2548d32b8a49abd52ab07053dff2320fd9d09e47f2",
+      "size_bytes": 2548
+    },
+    {
+      "path": "scripts/audit_lean.py",
+      "sha256": "94b3f45e60b2ff7b90606adeb1d8636aac60a2b832f7da5d7570334e8580418a",
+      "size_bytes": 2312
+    }
+  ]
+}
