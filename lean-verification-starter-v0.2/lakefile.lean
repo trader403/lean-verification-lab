@@ -4,6 +4,7 @@ open Lake DSL
 package «formal-project» where
   -- Add project-specific configuration here.
 
+@[default_target]
 lean_lib Proofs where
   srcDir := "."
   roots := #[`Proofs.Main]
