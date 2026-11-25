@@ -1,37 +1,56 @@
-# Lean 4 verification starter — Core-only smoke project
+[README.md](https://github.com/user-attachments/files/35393805/README.md)# Lean 4 Verification Lab — Core-only starter
 
-This is a ready-to-push minimal Lean 4 project. It uses the stable Lean toolchain `leanprover/lean4:v4.36.0` and does not depend on Mathlib. The GitHub Actions workflow installs Lean on a hosted runner, runs a source preflight, builds the project, and archives logs.
+This directory is a minimal Lean 4 project intended to provide a reproducible starting point for formal verification experiments. It currently uses Lean `leanprover/lean4:v4.36.0` and has no Mathlib dependency.
 
-> Important: this package has **not** been compiled in the current ChatGPT container. A green GitHub Actions run is required before claiming that the project builds.
+## Current verified state
 
-## What to do
+The GitHub Actions workflow at `.github/workflows/lean-verification.yml` has completed successfully for commit `94abbd54526d1089d60176abfb757dc36d2433ea`:
 
-1. Create a new empty GitHub repository, preferably private, named `lean-verification-lab` (do not add a README, license, or `.gitignore` during creation).
-2. Upload the **contents of this folder** to the repository root. The root must directly contain `lean-toolchain`, `lakefile.lean`, `Proofs/`, `scripts/`, and `.github/`.
-3. Commit the upload. GitHub Actions should start automatically. If it does not, open the repository's **Actions** tab and run **Lean verification** using **Run workflow**.
-4. Open the workflow run. Confirm that `Source preflight` and `Build project` both pass. Download `lean-verification-evidence` from the run's Artifacts section to preserve the logs.
+- Source preflight scanned two Lean files and reported no `sorry`, `admit`, or explicit `axiom` declarations.
+- `lake check-build` succeeded.
+- `lake build Proofs` compiled `Proofs.Main` (the log reported `Built Proofs.Main`).
+- The Lean action's build step also succeeded.
+- `#print axioms FormalProject.identity_implication` reported that the theorem does not depend on any axioms.
 
-Uploading the ZIP file itself to the repository is not sufficient; GitHub Actions needs the extracted files at the repository root.
+Run evidence: <https://github.com/trader403/lean-verification-lab/actions/runs/45548463076>
 
-## Project contents
+This is an environment smoke test, not a research result. The theorem is elementary, and its formalization has not received an independent semantic review. A successful build establishes that Lean accepted the elaborated proof term; it does not establish that a future formalization faithfully captures an intended informal theorem.
 
-- `lean-toolchain`: exact Lean version pin.
-- `lakefile.lean`: Lake package and `Proofs.Main` library target.
-- `Proofs/Main.lean`: tiny smoke-test theorem and `#print axioms` check.
-- `.github/workflows/lean.yml`: CI build and evidence archive.
-- `scripts/audit_lean.py`: conservative text preflight for `sorry`, `admit`, explicit `axiom` declarations, and placeholder toolchains.
-- `schemas/verification-report.schema.json`: report schema for later research tasks.
-- `examples/VERIFICATION_REPORT.example.json`: illustrative `not_run` report, not an actual result.
+## Repository layout
+
+The repository root contains the GitHub Actions workflow under `.github/workflows/lean-verification.yml`. This project directory contains:
+
+- `lean-toolchain` — exact Lean toolchain pin.
+- `lakefile.lean` — Lake package and default `Proofs` library target.
+- `lake-manifest.json` — generated Lake dependency lock/manifest; commit it so dependency resolution is reproducible.
+- `Proofs/Main.lean` — minimal smoke-test theorem and its `#print axioms` command.
+- `scripts/audit_lean.py` — conservative source/configuration preflight; not a Lean kernel verifier.
+- `schemas/verification-report.schema.json` — schema for machine-readable verification records.
+- `examples/` — illustrative reports and templates. A report marked as an example is not evidence of a successful run unless it identifies a real commit and run.
+
+## Reproduce locally
+
+From this directory, with elan and the pinned Lean toolchain installed:
+
+```sh
+python scripts/audit_lean.py --root . --report preflight-report.json
+lake check-build
+lake build Proofs
+```
+
+The GitHub Actions workflow runs the same preflight and explicit Lake checks, then runs the Lean action build. It archives the preflight report and generated manifest as workflow artifacts.
 
 ## Evidence levels
 
-1. **Source preflight** is a text scan, not proof checking.
-2. **`lake build` passed** means the project compiled with the pinned Lean toolchain in that CI run.
-3. **`#print axioms`** displays the axioms used by the smoke-test theorem. For research theorems, this must be run on each key theorem and reviewed against an explicit allowlist.
-4. **Formalization review** must separately check that Lean definitions, hypotheses, and conclusions faithfully represent the original mathematical claim.
+1. **Source preflight:** text-based screening only; it can miss syntactic or semantic cases and must not be described as proof verification.
+2. **Lake/Lean build:** Lean elaborates and kernel-checks the generated declarations in the pinned environment.
+3. **Axiom dependency inspection:** `#print axioms` reports the axioms used by a named theorem; the output must be retained and reviewed against a project-specific policy.
+4. **Formalization review:** a separate review checks that definitions, assumptions, and conclusions match the intended mathematical claim.
+5. **Independent checking:** an independent checker or separately reproduced verification path is additional evidence, not currently provided by this starter.
 
-A green build alone does not establish mathematical correctness or semantic fidelity.
+Do not collapse these evidence levels into a single unqualified “verified” status.
 
 ## Adding Mathlib later
 
-Do not add a floating `master` dependency. Select a Mathlib revision compatible with the pinned Lean toolchain, declare it in `lakefile.lean`, run `lake update` intentionally, and commit the generated `lake-manifest.json`. The current starter is intentionally Core-only so the first CI test remains small and isolates the Lean environment from Mathlib dependency setup.
+Keep the current Core-only baseline stable. When Mathlib is needed, first select a revision compatible with the pinned Lean toolchain, add it explicitly to `lakefile.lean`, run `lake update`, and commit the resulting `lake-manifest.json`. Do not use a floating dependency revision for reproducibility-sensitive experiments.
+
